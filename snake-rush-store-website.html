@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Snake Rush — endless snake arcade gameplay, daily missions, daily rewards, skins and weekly leaderboard challenges.">
+<title>TRi30 Studio — Snake Rush Endless</title>
+<style>
+:root{
+  --bg:#070817; --panel:#101329; --panel2:#151936; --cyan:#13f5d2;
+  --green:#39e75f; --yellow:#ffd21a; --pink:#ff25c8; --purple:#7b4dff;
+  --text:#f6f7ff; --muted:#a9adc8; --line:#193f55;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(0,255,210,.12),transparent 30%),
+    radial-gradient(circle at 85% 15%,rgba(255,0,190,.12),transparent 30%),
+    linear-gradient(180deg,#070817,#090a1a 55%,#050610);
+  color:var(--text);line-height:1.6;
+}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+.container{width:min(1120px,92%);margin:auto}
+nav{
+  position:sticky;top:0;z-index:20;background:rgba(7,8,23,.88);
+  backdrop-filter:blur(14px);border-bottom:1px solid rgba(19,245,210,.18)
+}
+.nav-inner{height:70px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-weight:900;font-size:25px;letter-spacing:.5px}
+.brand span{color:var(--cyan)}
+.nav-links{display:flex;gap:24px;font-weight:700;font-size:14px}
+.hero{padding:85px 0 70px;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:55px;align-items:center}
+.badge{
+  display:inline-block;border:1px solid rgba(19,245,210,.45);color:var(--cyan);
+  border-radius:999px;padding:7px 13px;font-size:12px;font-weight:800;letter-spacing:1.5px
+}
+h1{font-size:clamp(52px,8vw,92px);line-height:.9;margin:20px 0 18px;font-weight:1000}
+.gradient{background:linear-gradient(90deg,#ffd21a,#ff8a00,#13f5d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:20px;color:var(--muted);max-width:650px}
+.ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+.btn{
+  display:inline-block;padding:13px 19px;border-radius:13px;font-weight:900;
+  border:1px solid rgba(19,245,210,.4);background:#0d1830;color:#fff
+}
+.btn.primary{background:linear-gradient(135deg,#13f5d2,#2fd75e);color:#04120e;border:0}
+.visual{
+  min-height:410px;border-radius:34px;border:1px solid rgba(19,245,210,.25);
+  background:
+    linear-gradient(rgba(17,245,210,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(17,245,210,.06) 1px,transparent 1px),
+    radial-gradient(circle at 50% 45%,rgba(41,245,110,.16),transparent 38%),#080a19;
+  background-size:28px 28px,28px 28px,auto,auto;
+  position:relative;overflow:hidden;box-shadow:0 0 80px rgba(0,255,210,.08)
+}
+.snake{position:absolute;left:15%;top:43%;width:70%;height:45px;display:flex;align-items:center;gap:7px;transform:rotate(-12deg)}
+.segment{width:43px;height:43px;border-radius:11px;background:#24d85a;box-shadow:0 0 15px rgba(36,216,90,.35)}
+.segment:nth-child(2n){background:#19bd50}
+.head{width:54px;height:54px;border-radius:16px;background:#7cff4d;position:relative;box-shadow:0 0 28px rgba(124,255,77,.8)}
+.eye{position:absolute;width:10px;height:14px;background:white;border-radius:50%;top:10px}
+.eye:after{content:"";position:absolute;width:5px;height:7px;background:#06110b;border-radius:50%;left:2px;top:3px}
+.eye.e1{left:11px}.eye.e2{right:11px}
+.tongue{position:absolute;right:-19px;top:29px;width:23px;height:3px;background:#ff4c72}
+.tongue:after{content:"";position:absolute;right:-2px;top:-4px;width:8px;height:8px;border-right:3px solid #ff4c72;transform:rotate(45deg)}
+.apple{position:absolute;left:18%;bottom:22%;width:48px;height:48px;background:#ff334e;border-radius:50%;box-shadow:0 0 20px rgba(255,51,78,.6)}
+.coin{position:absolute;right:20%;bottom:27%;width:54px;height:54px;border-radius:50%;background:#ffd21a;border:5px solid #fff08b;box-shadow:0 0 25px rgba(255,210,26,.55);display:grid;place-items:center;color:#805c00;font-weight:1000}
+.crown{position:absolute;top:12%;left:43%;font-size:58px;filter:drop-shadow(0 0 10px #ffd21a)}
+section{padding:78px 0}
+.section-title{text-align:center;font-size:38px;margin:0 0 12px}
+.section-sub{text-align:center;color:var(--muted);max-width:700px;margin:0 auto 38px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{
+  padding:27px;border:1px solid rgba(19,245,210,.2);border-radius:20px;background:rgba(16,19,41,.75)
+}
+.icon{font-size:34px}.card h3{margin:10px 0 5px}.card p{color:var(--muted);margin:0}
+.policy{
+  background:#0c0e20;border-top:1px solid rgba(19,245,210,.15);border-bottom:1px solid rgba(19,245,210,.15)
+}
+.policy article{max-width:900px;margin:auto}
+.policy h2{font-size:38px}.policy h3{margin-top:34px;color:#fff}
+.policy p,.policy li{color:#c4c7dc}
+.notice{padding:15px 18px;border-left:4px solid var(--yellow);background:rgba(255,210,26,.07);color:#ddd}
+footer{padding:35px 0;color:#8f94b2;text-align:center;font-size:14px}
+@media(max-width:800px){
+  .hero-grid{grid-template-columns:1fr}.visual{min-height:320px}.features{grid-template-columns:1fr}
+  .nav-links{gap:12px;font-size:12px}.nav-inner{height:62px}
+  h1{font-size:58px}.lead{font-size:17px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <div class="brand">TRi30 <span>Studio</span></div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#privacy">Privacy Policy</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge">SNAKE RUSH ENDLESS</span>
+      <h1>PLAY.<br><span class="gradient">GROW.</span><br>CHALLENGE.</h1>
+      <p class="lead">Grow your snake, complete daily missions, collect rewards, unlock skins and challenge the weekly leaderboard.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#features">Explore Snake Rush</a>
+        <a class="btn" href="#privacy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="visual" aria-label="Snake Rush game artwork">
+      <div class="crown">♛</div>
+      <div class="snake">
+        <div class="segment"></div><div class="segment"></div><div class="segment"></div>
+        <div class="segment"></div><div class="segment"></div><div class="segment"></div>
+        <div class="segment"></div><div class="head"><i class="eye e1"></i><i class="eye e2"></i><i class="tongue"></i></div>
+      </div>
+      <div class="apple"></div><div class="coin">★</div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="container">
+    <h2 class="section-title">Why Snake Rush?</h2>
+    <p class="section-sub">Easy to pick up. Difficult to master. Built around the score-chasing loop.</p>
+    <div class="features">
+      <div class="card"><div class="icon">🐍</div><h3>Endless Gameplay</h3><p>Keep moving, grow your snake and push your score higher.</p></div>
+      <div class="card"><div class="icon">🏆</div><h3>Weekly Leaderboard</h3><p>Compete for the top score and challenge the leaderboard every week.</p></div>
+      <div class="card"><div class="icon">🎯</div><h3>Daily Missions</h3><p>Complete daily objectives and earn in-game rewards.</p></div>
+      <div class="card"><div class="icon">🎁</div><h3>Daily Rewards</h3><p>Return each day to collect your reward and keep playing.</p></div>
+      <div class="card"><div class="icon">🎨</div><h3>Snake Skins</h3><p>Unlock different looks and customize your snake.</p></div>
+      <div class="card"><div class="icon">🔥</div><h3>Beat Your Score</h3><p>Every run is another opportunity to improve and climb higher.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="privacy" class="policy">
+  <div class="container">
+    <article>
+      <h2>Privacy Policy</h2>
+      <p><strong>Last updated: September 21, 2026</strong></p>
+
+      <div class="notice">
+        <strong>Important:</strong> Replace the developer name and contact email below with the exact developer/company information used on your Google Play listing before publishing this page.
+      </div>
+
+      <h3>1. Introduction</h3>
+      <p>This Privacy Policy explains how <strong>[DEVELOPER / COMPANY NAME]</strong> ("we", "us", or "our") handles information in connection with <strong>Snake Rush</strong> (the "App").</p>
+      <p>We respect your privacy and aim to collect and use only the information needed to operate, improve, secure, and provide the features of the App.</p>
+
+      <h3>2. Information We May Collect</h3>
+      <p>Depending on the version of the App and the services enabled, Snake Rush may process the following categories of information:</p>
+      <ul>
+        <li><strong>Gameplay and score information:</strong> scores, leaderboard position, missions, rewards, selected skin, and related gameplay progress.</li>
+        <li><strong>Anonymous account identifier:</strong> if Firebase Authentication with anonymous authentication is used for the weekly leaderboard, Firebase may generate an anonymous identifier for the player. We do not require your name, email address, phone number, or password to use this feature.</li>
+        <li><strong>Leaderboard information:</strong> a player display name or generated nickname, score, ranking information, and timestamps associated with leaderboard submissions, where applicable.</li>
+        <li><strong>Technical information:</strong> information that may be provided automatically by the operating system, platform, analytics tools, crash-reporting tools, advertising SDKs, or other third-party services used by the App. The exact data depends on the SDKs included in the published build.</li>
+      </ul>
+
+      <h3>3. How We Use Information</h3>
+      <ul>
+        <li>Provide and maintain Snake Rush and its gameplay features.</li>
+        <li>Operate the weekly leaderboard and prevent invalid or fraudulent score submissions.</li>
+        <li>Save and synchronize applicable gameplay or leaderboard data.</li>
+        <li>Provide daily missions, daily rewards, skins, and related progression features.</li>
+        <li>Monitor performance, diagnose crashes, prevent abuse, and improve the App.</li>
+        <li>Comply with applicable laws and enforce our terms and policies.</li>
+      </ul>
+
+      <h3>4. Firebase and Third-Party Services</h3>
+      <p>The App may use third-party services such as Google Firebase for authentication, cloud data storage, security, analytics, or other backend functionality. If these services are included in the published build, the applicable service providers may process information as necessary to provide their services.</p>
+      <p>The App may also use third-party advertising or analytics services if those SDKs are included in the published version. Their handling of information is governed by their respective privacy policies and applicable platform requirements.</p>
+
+      <h3>5. Advertising</h3>
+      <p>If advertisements are included in the published version of Snake Rush, advertising providers may process certain device, advertising, diagnostic, or interaction information to deliver, measure, limit, or personalize advertisements as permitted by applicable law and platform rules.</p>
+      <p>If the published version does not contain advertising SDKs, this section does not apply to that version.</p>
+
+      <h3>6. Data Sharing</h3>
+      <p>We do not sell your personal information.</p>
+      <p>Information may be processed or shared with service providers that help us operate the App, such as cloud infrastructure, authentication, analytics, crash reporting, security, or advertising providers, where those services are actually used in the published version.</p>
+      <p>We may also disclose information when required by law, legal process, or to protect the security, rights, or property of users, the App, or others.</p>
+
+      <h3>7. Data Security</h3>
+      <p>We use reasonable technical and organizational measures designed to protect information against unauthorized access, alteration, disclosure, or destruction. No internet transmission or electronic storage system can be guaranteed to be completely secure.</p>
+
+      <h3>8. Data Retention</h3>
+      <p>We retain information only for as long as reasonably necessary for the purposes described in this policy, including operating the App, maintaining leaderboard functionality, preventing fraud, resolving disputes, complying with legal obligations, and maintaining security.</p>
+      <p>Leaderboard and gameplay-related records may be retained for as long as needed to operate the relevant feature and may be deleted, anonymized, or rotated according to our operational practices.</p>
+
+      <h3>9. Data Deletion Requests</h3>
+      <p>You may request deletion of information associated with your use of Snake Rush by contacting us at <a href="mailto:[PRIVACY EMAIL]">[PRIVACY EMAIL]</a>.</p>
+      <p>When applicable, we will process a valid deletion request and delete or anonymize information that we are not required or permitted to retain. Certain information may need to be retained where required by law or for legitimate security and fraud-prevention purposes.</p>
+
+      <h3>10. Children's Privacy</h3>
+      <p>Snake Rush is not intended to knowingly collect personal information from children in violation of applicable law. We do not knowingly request names, email addresses, phone numbers, or other direct identifiers from children for ordinary gameplay.</p>
+      <p>If you believe that a child has provided personal information to us, please contact us so that we can review and take appropriate action.</p>
+
+      <h3>11. International Data Processing</h3>
+      <p>Depending on the third-party services used by the App, information may be processed on servers located in countries other than your country of residence. We take reasonable steps to ensure that applicable privacy and security requirements are addressed.</p>
+
+      <h3>12. Your Choices</h3>
+      <p>You may stop using the App at any time. Where applicable, you may also manage platform-level permissions, advertising settings, or other privacy controls provided by your device or app store.</p>
+
+      <h3>13. Changes to This Privacy Policy</h3>
+      <p>We may update this Privacy Policy when our App, services, legal obligations, or data practices change. The updated version will be posted on this page with a revised "Last updated" date.</p>
+
+      <h3>14. Contact Us</h3>
+      <p>If you have questions about this Privacy Policy or how Snake Rush handles information, contact:</p>
+      <p><strong>DEVELOPER</strong><br>
+      Privacy contact: <a href="mailto:tri30.help@gmail.com">[PRIVACY EMAIL]</a></p>
+
+      <p style="margin-top:45px"><a href="#">Back to top ↑</a></p>
+    </article>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    © 2026 TRi30 Studio. All rights reserved. &nbsp;·&nbsp;
+    <a href="#privacy">Privacy Policy</a>
+  </div>
+</footer>
+
+</body>
+</html>
